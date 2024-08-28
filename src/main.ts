@@ -42,4 +42,6 @@ eventEmitter.on(SPIN_BUTTON_CLICKED, async () => {
     (reel as Reel).stop(Math.floor(Math.random() * 25) + 1);
     await sleep(200);
   }
+
+  spinButton.enableButton();
 })

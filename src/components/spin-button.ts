@@ -24,10 +24,21 @@ export default class SpinButton {
         this.button.addChild(buttonText);
 
         // Add interactivity to the button
-        this.button.eventMode = 'static';
-        this.button.cursor = 'pointer';
+        this.enableButton();
+
         this.button.on('click', () => {
             eventEmitter.emit(SPIN_BUTTON_CLICKED);
+            this.disableButton();
         })
+    }
+
+    public enableButton() {
+        this.button.eventMode = 'static';
+        this.button.cursor = 'pointer';
+    }
+
+    public disableButton() {
+        this.button.eventMode = 'auto';
+        this.button.cursor = 'default';
     }
 }
