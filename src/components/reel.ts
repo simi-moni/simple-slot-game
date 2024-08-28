@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { Pointlike } from '../global';
 import * as PIXI from 'pixi.js';
+import { wrap } from 'gsap/all';
 
 export default class Reel extends PIXI.Container {
     private readonly reelItemHeight = 100;
@@ -21,12 +22,16 @@ export default class Reel extends PIXI.Container {
         this.currentReelSet = v;
     }
 
+    private getCurrentSymbolId(index: number): string {
+        return wrap(this.currentReelSet, index);
+    }
+
     public createSymbols() {
         const symbols = this.symbolsPerReel + 1; //the additional symbol will be overhanging
 
         for (let index = 0; index < symbols; index++) {
             const reelItem = new PIXI.Text({
-                text: this.currentReelSet[index],
+                text: this.getCurrentSymbolId(index),
                 style: {
                     fontFamily: 'Arial',
                     fontSize: 36,
@@ -61,7 +66,7 @@ export default class Reel extends PIXI.Container {
 
             // Setting the new texture when the symbol out of the player's eye
             spinAnimationStep.set(symbol, { y: -170 });
-            symbol.text = this.currentReelSet[this.currentRowIndex];
+            symbol.text = this.getCurrentSymbolId(this.currentRowIndex);
 
             this.currentRowIndex++; // Incrementing the row for each passed symbol
             spinAnimationStep.add(gsap.to(symbol, { y: destY, duration: wrapDuration, ease: 'none' }));
@@ -81,7 +86,7 @@ export default class Reel extends PIXI.Container {
                 for (let index = 0; index < symbols.length; index++) {
                     const symbol = symbols[index];
                     // Setting the final texture for each symbol
-                    (symbol as PIXI.Text).text = this.currentReelSet[this.currentRowIndex];
+                    (symbol as PIXI.Text).text = this.getCurrentSymbolId(this.currentRowIndex);
                     symbol.y = this.defaultSymbolsPositions[index];
                     this.currentRowIndex++;
                 }
